@@ -1,14 +1,18 @@
 FROM node:lts-alpine
-FROM verdaccio/verdaccio:5
+# Set the working directory to /verdaccio
+WORKDIR /verdaccio
 
-USER root
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-ENV NODE_ENV=production
+# Install Verdaccio
+RUN npm install
 
-RUN yarn && yarn add verdaccio-memory
+# Copy Verdaccio configuration
+COPY config.yaml .
 
-COPY ./config.yaml /verdaccio/conf
+# Expose the default Verdaccio port
+EXPOSE 4873
 
-USER verdaccio
-# Important step, $PORT is provided by heroku while verdaccio uses $VERDACCIO_PORT, we need to override it
-CMD node -r ./.pnp.js $VERDACCIO_APPDIR/bin/verdaccio --config /verdaccio/conf/config.yaml --listen $VERDACCIO_PROTOCOL://0.0.0.0:$PORT
+# Start Verdaccio
+CMD ["npx", "verdaccio", "--config", "config.yaml"]
