@@ -7,6 +7,7 @@ COPY package*.json ./
 
 # Install Verdaccio
 RUN npm install
+RUN npm install -g verdaccio
 
 # Copy Verdaccio configuration
 COPY config.yaml .
