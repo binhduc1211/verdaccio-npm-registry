@@ -13,7 +13,7 @@ RUN npm install -g verdaccio
 COPY config.yaml .
 
 # Expose the default Verdaccio port
-EXPOSE 80
+EXPOSE 4873
 
 # Start Verdaccio
 CMD ["npx", "verdaccio", "--config", "config.yaml"]
